@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      //   function Clock({ template }) {
+      //     let timer;
+
+      //     function render() {
+      //       let date = new Date();
+
+      //       let hours = date.getHours();
+      //       if (hours < 10) hours = "0" + hours;
+
+      //       let mins = date.getMinutes();
+      //       if (mins < 10) mins = "0" + mins;
+
+      //       let secs = date.getSeconds();
+      //       if (secs < 10) secs = "0" + secs;
+
+      //       let output = template.replace("h", hours).replace("m", mins).replace("s", secs);
+
+      //       console.log(output);
+      //     }
+
+      //     this.stop = function () {
+      //       clearInterval(timer);
+      //     };
+
+      //     this.start = function () {
+      //       render();
+      //       timer = setInterval(render, 1000);
+      //     };
+      //   }
+
+      class Clock {
+        constructor({ template }) {
+          this.template = template;
+          this.render();
+        }
+
+        // SetInterval bind this window nên dùng arrow function
+        // Hoặc có thể bind this ngay dòng 62
+        render = () => {
+          this.date = new Date();
+          this.hours = this.date.getHours();
+          this.mins = this.date.getMinutes();
+          this.secs = this.date.getSeconds();
+
+          let output = this.template
+            .replace("h", this.hours)
+            .replace("m", this.mins)
+            .replace("s", this.secs);
+          console.log(output);
+        };
+
+        start = () => {
+          this.render();
+          this.timer = setInterval(this.render, 1000);
+        };
+      }
+
+      let clock = new Clock({ template: "h:m:s" });
+      clock.start();
+    </script>
+  </body>
+</html>

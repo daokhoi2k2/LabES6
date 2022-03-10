@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <script>
+      // http://hcm-lms.poly.edu.vn/goto.php?target=file_232307_download&client_id=lmsfpoly
+      class User {
+        constructor(name, age) {
+          this.name = name;
+          this.age = age;
+        }
+
+        getInfo() {
+          return this;
+        }
+
+        move(x, y) {
+            this.x = x;
+            this.y = y;
+        }
+      }
+
+      const DaoKhoi = new User("Đào Đức Minh Khôi", 20);
+      DaoKhoi.move(20, 30);
+      console.log(DaoKhoi.getInfo());
+    </script>
+  </body>
+</html>
