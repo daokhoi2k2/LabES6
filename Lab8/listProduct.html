@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  </head>
+  <body>
+    <table class="table">
+      <thead class="thead-dark">
+        <tr>
+          <th scope="col">#</th>
+          <th scope="col">Tên</th>
+          <th scope="col">Giá</th>
+          <th scope="col">Xử lý</th>
+        </tr>
+      </thead>
+      <tbody id="list"></tbody>
+    </table>
+    <script>
+      async function getData(uri) {
+        const res = await fetch(uri);
+        return res.json();
+      }
+
+      async function deleteData(uri, key) {
+        const url = `${uri}/${key}.json`;
+        const res = await fetch(url, {
+          method: "DELETE",
+        });
+
+        return res;
+      }
+
+      const deleteProduct = async (key, e) => {
+        const res = await deleteData(
+          "https://lab8es6-default-rtdb.asia-southeast1.firebasedatabase.app/products",
+          key
+        );
+
+        if(res.status === 200) {
+          e.parentElement.parentElement.remove()
+          Toastify({
+            text: "Xóa sản phẩm thành công",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+          }).showToast();
+        } else {
+          Toastify({
+            text: "Lỗi xảy ra khi thực thi",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, orange, red)",
+            },
+          }).showToast();
+        }
+      };
+
+      const renderUI = async () => {
+        const listElement = document.querySelector("#list");
+        const data = await getData(
+          "https://lab8es6-default-rtdb.asia-southeast1.firebasedatabase.app/products.json"
+        );
+
+        const html = Object.keys(data)
+          .map((key) => {
+            if(data[key] === null) return ""; 
+            console.log(data[key])
+            return ` 
+                  <tr>
+                    <th scope="row">${data[key].id}</th>
+                    <td>${data[key].productName}</td>
+                    <td>${data[key].price}</td>
+                    <td><button onclick="deleteProduct('${key}', this)" class='btn btn-danger'>Xóa</button></td>
+                  </tr> 
+                `;
+          })
+          .join("");
+
+        listElement.innerHTML = html;
+      };
+
+      renderUI();
+    </script>
+  </body>
+</html>

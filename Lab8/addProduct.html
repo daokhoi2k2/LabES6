@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
+      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous"
+    />
+    <link
+      rel="stylesheet"
+      type="text/css"
+      href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css"
+    />
+
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+  </head>
+  <body>
+    <div class="container mt-5">
+      <form>
+        <div class="form-group">
+          <label for="idProduct">ID</label>
+          <input type="text" class="form-control" id="idProduct" placeholder="ID" />
+        </div>
+        <div class="form-group">
+          <label for="nameProduct">Tên sản phẩm</label>
+          <input type="text" class="form-control" id="nameProduct" placeholder="Tên" />
+        </div>
+        <div class="form-group">
+          <label for="price">Giá</label>
+          <input type="text" class="form-control" id="price" placeholder="Giá" />
+        </div>
+        <div class="form-group">
+          <label for="description">Mô tả</label>
+          <textarea class="form-control" id="description" rows="3"></textarea>
+        </div>
+        <div class="form-group">
+          <button class="btn btn-primary" id="btnAdd">Thêm</button>
+        </div>
+      </form>
+    </div>
+    <script>
+      async function createProduct(uri, data) {
+        const res = await fetch(uri, {
+          method: "POST",
+          body: JSON.stringify(data),
+        });
+        return res;
+      }
+
+      const addElement = document.querySelector("#btnAdd");
+
+      const idProduct = document.querySelector("#idProduct");
+      const nameProduct = document.querySelector("#nameProduct");
+      const priceProduct = document.querySelector("#price");
+      const descriptionProduct = document.querySelector("#description");
+      addElement.onclick = async (e) => {
+        e.preventDefault();
+
+        const res = await createProduct(
+          "https://lab8es6-default-rtdb.asia-southeast1.firebasedatabase.app/products.json",
+          {
+            id: idProduct.value,
+            productName: nameProduct.value,
+            price: priceProduct.value,
+            description: descriptionProduct.value,
+          }
+        );
+
+        if (res.status === 200) {
+          Toastify({
+            text: "Thêm sản phẩm thành công",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, #00b09b, #96c93d)",
+            },
+          }).showToast();
+        } else {
+            Toastify({
+            text: "Có lỗi xảy ra khi thêm sản phẩm",
+            duration: 3000,
+            newWindow: true,
+            close: true,
+            gravity: "bottom", // `top` or `bottom`
+            position: "right", // `left`, `center` or `right`
+            stopOnFocus: true, // Prevents dismissing of toast on hover
+            style: {
+              background: "linear-gradient(to right, orange, red)",
+            },
+          }).showToast();
+        }
+      };
+    </script>
+  </body>
+</html>
